@@ -29,9 +29,12 @@
   <input type="text" th:field="*{password}" id="password"/>
       <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"> Password error</div>
   <br><br>
-  <label for="roles"><b>Add role: (ADMIN or USER)</b></label>
-  <input type="text" th:field="*{roles}" id="roles"/>
-<!--      <div style="color:red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"> Roles error</div>-->
+  <label for="roles"><b>Role:</b></label>
+  <select th:field="*{roles}"  id="roles">
+    <option value="0">select role</option>
+    <option th:each="role: ${roles}" th:value="${role}" th:text="${role}">
+    </option>
+  </select>
   <br><br>
   <input type="hidden" th:field="*{id}"/>
   <input type="submit" value="OK"/>

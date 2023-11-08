@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Objects;
@@ -21,11 +22,13 @@ public class User implements UserDetails {
     @Column(name = "user_id")
     private long id;
 
+    @Pattern(regexp = "^[a-zA-Zа-яА-Я]+$", message = "Name should contains only letters")
     @NotBlank(message = "Name should not be empty")
-    @Size(min = 1, max = 30, message = "Name should be between 1 and 30 characters")
+    @Size(min = 1, max = 30, message = "Name should be between 1 and 30 characters ")
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Pattern(regexp = "^[a-zA-Zа-яА-Я]+$", message = "Surname should contains only letters")
     @NotBlank(message = "Surname should not be empty")
     @Size(min = 1, max = 30, message = "Surname should be between 1 and 30 characters")
     @Column(name = "surname", nullable = false)

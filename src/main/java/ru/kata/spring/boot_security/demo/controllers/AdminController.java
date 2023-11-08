@@ -11,7 +11,9 @@ import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -58,6 +60,7 @@ public class AdminController {
     public String updateUser(Model model, @RequestParam("userId") Long id) {
         User user = userService.getUser(id);
         model.addAttribute("user", user);
+        model.addAttribute("roles",roleService.getAllRoles());
         return userInfo;
     }
 
