@@ -26,28 +26,29 @@ public class AdminController {
         this.userService = userService;
         this.roleService = roleService;
     }
-    String redirect = "redirect:/admin";
-    String userInfo = "admin/userInfo";
+    String redirect = "redirect:/admin/";
 
-    @GetMapping
+
+    @GetMapping("/")
     public String getAdminPage(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("user", user);
+        model.addAttribute("roles", roleService.getAllRoles());
         return "admin/adminPage";
     }
 
-    @GetMapping(value = "/new")
-    public String newUser(@ModelAttribute User user, Model model){
-        model.addAttribute("user", user);
+    @GetMapping("/add")
+    public String newUserPage(Model model) {
+        model.addAttribute("user", new User());
         model.addAttribute("roles", roleService.getAllRoles());
-        return userInfo;
+        return "admin/newUser";
     }
 
-    @PostMapping
+    @PostMapping("/new")
     public String createUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
                              @RequestParam(value = "roles") String[] selectResult) {
         if (bindingResult.hasErrors()) {
-            return userInfo;
+            return "admin/newUser";
         }
         for (String s : selectResult) {
             user.setRoles(Collections.singleton(roleService.getRoleByName(s)));
@@ -56,16 +57,20 @@ public class AdminController {
         return redirect;
     }
 
-    @GetMapping(value = "/updateUser")
-    public String updateUser(Model model, @RequestParam("userId") Long id) {
-        User user = userService.getUser(id);
-        model.addAttribute("user", user);
-        model.addAttribute("roles",roleService.getAllRoles());
-        return userInfo;
+    @PatchMapping(value = "/{id}")
+    public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                             @RequestParam(value = "roles") String[] selectResult) {
+        if (!bindingResult.hasErrors()) {
+            for (String s : selectResult) {
+                user.setRoles(Collections.singleton(roleService.getRoleByName(s)));
+            }
+            userService.updateUser(user);
+        }
+        return redirect;
     }
 
-    @GetMapping(value = "/deleteUser")
-    public String deleteUser(@RequestParam("userId") Long id) {
+    @DeleteMapping(value = "/{id}")
+    public String deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return redirect;
     }

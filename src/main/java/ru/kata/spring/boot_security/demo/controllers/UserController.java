@@ -11,9 +11,14 @@ import ru.kata.spring.boot_security.demo.models.User;
 @RequestMapping("/user")
 public class UserController {
 
+    @GetMapping(value = "/login")
+    public String loginPage() {
+        return "user/login";
+    }
+
     @GetMapping("/")
     public String show(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("user", user);
+        model.addAttribute("user_one", user);
         return "user/userPage";
     }
 }
