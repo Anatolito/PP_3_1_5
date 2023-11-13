@@ -13,6 +13,7 @@
 <body style="background-color: ivory">
 
 <form method="post" action="/login">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     <div class="text-center" style="padding: 5px;">
         <h2><strong>Please sign in</strong></h2>
         <div class="border rounded w-25 mx-auto" style="padding: 0px;margin: 10px;">

@@ -3,7 +3,6 @@
 <head>
     <title>Admin page</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
           crossorigin="anonymous">
@@ -31,7 +30,7 @@
         <div class="col-2" style="background-color: aliceblue; min-height: 100vh">
             <div class="d-grid gap-1 col-12 mt-4" th:each="role : ${user.getRoles()}">
                 <a th:href="@{/admin/}" class="btn btn-primary w-100 border-0"
-                   onclick="location.href='/admin'" th:if="${role.role == 'ADMIN'}">Admin</a>
+                   onclick="location.href='/admin'" th:if="${role.role == 'ROLE_ADMIN'}">Admin</a>
                 <a th:href="@{/user/}" class="btn btn-primary w-100 border-0">User</a>
             </div>
         </div>
@@ -50,8 +49,7 @@
                         </div>
 
                         <div class="card-body">
-                            <table class="table table-striped">
-                                <thead>
+                            <table class="table table-striped table-hover">
                                 <tr>
                                     <th scope="col">ID</th>
                                     <th scope="col">Name</th>
@@ -62,15 +60,13 @@
                                     <th scope="col">Edit</th>
                                     <th scope="col">Delete</th>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="user:${users}" class="align-middle">
+                                <tr th:each="user:${users}" >
                                     <td th:text="${user.getId()}"></td>
                                     <td th:text="${user.getName()}"></td>
                                     <td th:text="${user.getSurname()}"></td>
                                     <td th:text="${user.getAge()}"></td>
                                     <td th:text="${user.getUsername()}"></td>
-                                    <td th:each="role : *{user.getRoles()}" th:text="${role.role}"></td>
+                                    <td th:text="${user.roles}"></td>
                                     <td>
                                         <a type="button" class="btn btn-sm btn-info link-light"
                                            data-bs-toggle="modal"
@@ -242,7 +238,6 @@
                                         </div>
                                     </td>
                                 </tr>
-                                </tbody>
                             </table>
                         </div>
                     </div>

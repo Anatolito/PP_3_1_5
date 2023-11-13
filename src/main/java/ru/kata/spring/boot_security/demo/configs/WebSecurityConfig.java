@@ -38,15 +38,12 @@ public class  WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
         http    .authorizeRequests()
-                .antMatchers("/", "/index").permitAll()
-                .antMatchers("/user/login").anonymous()
-                .antMatchers("/admin/**").access("hasAnyAuthority('ADMIN')")
-                .antMatchers("/user/**").access("hasAnyAuthority('ADMIN', 'USER')")
-                .anyRequest().authenticated()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/login","/", "/index").permitAll()
+                .anyRequest().hasAnyRole("ADMIN", "USER")
                 .and()
                 .logout()
-                .permitAll()
-                .and().csrf().disable();
+                .permitAll();
     }
 
     @Bean

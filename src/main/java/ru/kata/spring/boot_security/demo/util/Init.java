@@ -24,17 +24,21 @@ public class Init {
 
     @PostConstruct
     public void initializeDataBase(){
-        roleService.addRole(new Role("ADMIN"));
-        roleService.addRole(new Role("USER"));
+        roleService.addRole(new Role("ROLE_ADMIN"));
+        roleService.addRole(new Role("ROLE_USER"));
 
         Set<Role> adminRole = new HashSet<>();
         Set<Role> userRole = new HashSet<>();
+        Set<Role> allRoles = new HashSet<>();
 
         adminRole.add(roleService.getRoleById(1L));
         userRole.add(roleService.getRoleById(2L));
+        allRoles.add(roleService.getRoleById(1L));
+        allRoles.add(roleService.getRoleById(2L));
 
         userService.saveUser(new User("Anatoly", "Zakharov",41,"admin","admin",adminRole));
         userService.saveUser(new User("Ivan", "Ivanov", 25, "user", "user", userRole));
+        userService.saveUser(new User("Petr", "Petrov",25,"adminuser","adminuser",allRoles));
     }
 }
 

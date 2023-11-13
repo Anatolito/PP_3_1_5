@@ -31,7 +31,7 @@
         <div class="col-2" style="background-color: aliceblue; min-height: 100vh">
             <div class="d-grid gap-1 col-12 mt-4" th:each="role : ${user.getRoles()}">
                 <a th:href="@{/admin/}" class="btn btn-primary w-100 border-0"
-                   onclick="location.href='/admin'" th:if="${role.role == 'ADMIN'}">Admin</a>
+                   onclick="location.href='/admin'" th:if="${role.role == 'ROLE_ADMIN'}">Admin</a>
                 <a th:href="@{/user/}" class="btn btn-primary w-100 border-0">User</a>
             </div>
         </div>
@@ -74,8 +74,8 @@
                             <label for="roles"><b>Role</b></label>
                             <select multiple class="form-control form-control-sm"
                                     id="roles" name="roles" size="2" required>
-                                <option value="USER">USER</option>
-                                <option value="ADMIN">ADMIN</option>
+                                <option value="ROLE_USER">ROLE_USER</option>
+                                <option value="ROLE_ADMIN">ROLE_ADMIN</option>
                             </select>
                             <input type="hidden" th:field="*{id}"/>
                             <br>
