@@ -12,6 +12,7 @@ import ru.kata.spring.boot_security.demo.dao.UserDao;
 import ru.kata.spring.boot_security.demo.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,42 +22,39 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    @Lazy
-    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserDao userDao, @Lazy PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
     }
 
-
     @Override
-    public List<User> getAllUsers() {
-        return userDao.getAllUsers();
+    public List<User> findAll() {
+        return userDao.findAll();
     }
 
     @Override
-    public User getUser(Long id) {
-        return userDao.getUser(id);
+    public User findOne(int id) {
+        return userDao.findOne(id);
     }
 
+    @Override
     @Transactional
-    @Override
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.saveUser(user);
     }
 
-    @Transactional
     @Override
-    public void updateUser(User user) {
-        if (!user.getPassword().equals(userDao.getUser(user.getId()).getPassword())) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-        userDao.updateUser(user);
+    @Transactional
+    public void update(int id, User updatedUser) {
+        updatedUser.setId(id);
+        updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        userDao.saveUser(updatedUser);
     }
 
-    @Transactional
     @Override
-    public void deleteUser(Long id) {
+    @Transactional
+    public void deleteUser(int id) {
         userDao.deleteUser(id);
     }
 
@@ -67,6 +65,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userDao.findByUserName(username);
+        Optional<User> user = Optional.ofNullable(userDao.findByUserName(username));
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("User not found!");
+        }
+        return user.get();
     }
 }

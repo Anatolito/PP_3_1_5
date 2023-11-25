@@ -5,15 +5,15 @@ import ru.kata.spring.boot_security.demo.models.User;
 import java.util.List;
 
 public interface UserDao {
-    List<User> getAllUsers();
+    List<User> findAll();
 
-    User getUser(Long id);
+    User findOne(int id);
 
     void saveUser(User user);
 
-    void updateUser(User user);
+    void update(int id, User updatedUser);
 
-    void deleteUser(Long id);
+    void deleteUser(int id);
 
     User findByUserName(String username);
 

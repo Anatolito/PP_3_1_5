@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
@@ -22,23 +23,24 @@ public class Init {
         this.roleService = roleService;
     }
 
+    @Transactional
     @PostConstruct
     public void initializeDataBase(){
-        roleService.addRole(new Role("ROLE_ADMIN"));
-        roleService.addRole(new Role("ROLE_USER"));
+        roleService.save(new Role("ROLE_ADMIN"));
+        roleService.save(new Role("ROLE_USER"));
 
         Set<Role> adminRole = new HashSet<>();
         Set<Role> userRole = new HashSet<>();
         Set<Role> allRoles = new HashSet<>();
 
-        adminRole.add(roleService.getRoleById(1L));
-        userRole.add(roleService.getRoleById(2L));
-        allRoles.add(roleService.getRoleById(1L));
-        allRoles.add(roleService.getRoleById(2L));
+        adminRole.add(roleService.showUserById(1));
+        userRole.add(roleService.showUserById(2));
+        allRoles.add(roleService.showUserById(1));
+        allRoles.add(roleService.showUserById(2));
 
-        userService.saveUser(new User("Anatoly", "Zakharov",41,"admin","admin",adminRole));
-        userService.saveUser(new User("Ivan", "Ivanov", 25, "user", "user", userRole));
-        userService.saveUser(new User("Petr", "Petrov",25,"adminuser","adminuser",allRoles));
+        userService.saveUser(new User("Anatoly", "Zakharov",41,"admin@mail.ru","admin",adminRole));
+        userService.saveUser(new User("Ivan", "Ivanov", 25, "user@mail.ru", "user", userRole));
+        userService.saveUser(new User("Petr", "Petrov",25,"adminuser@mail.ru","adminuser",allRoles));
     }
 }
 
